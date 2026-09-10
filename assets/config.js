@@ -3,5 +3,5 @@
    Le mot de passe n'est PAS ici : il vit uniquement dans les propriétés
    du script Apps Script. */
 window.WT14_CONFIG = {
-  WEB_APP_URL: ''
+  WEB_APP_URL: 'https://script.google.com/macros/s/AKfycbzp2Ohhx2ovpZpgvZkfrxfY-9sk_85xYckJrug4pkcjnkScArH3mP7L0-KRZm48jkyz/exec'
 };

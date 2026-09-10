@@ -36,6 +36,67 @@ var FAMILY_VALUES = ['easy', 'negotiate', 'hard'];
 var SIX_NATIONS_VALUES = ['instead', 'addon', 'none'];
 var DATE_CONSTRAINT_VALUES = ['fixed', 'prefer', 'flexible'];
 
+// ------------------------------------------------------- installation one-shot
+
+/**
+ * À lancer une seule fois depuis l'éditeur Apps Script : crée les quatre
+ * onglets, les en-têtes, les cinq scénarios de départ et la config.
+ * Relançable sans risque : ne touche pas à un onglet déjà rempli.
+ */
+function setupSheet() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+
+  var sc = ensureSheet(ss, SHEET_SCENARIOS, SCENARIO_HEADERS);
+  if (sc.getLastRow() < 2) {
+    var now = new Date();
+    [
+      ['S0', 'Statu quo', 'Les deux demi-finales en tribune, la fête autour, comme depuis 15 ans', '', 'visible', now, false, false, false, false, false],
+      ['S1', 'Un match + activités', 'Un seul match en tribune « format classique », le reste du weekend en activités entre potes', '', 'visible', now, false, false, false, true, false],
+      ['S2', 'Zéro match en live, maison louée', 'Aucun match au stade : on loue une maison et on regarde les matches ensemble à la TV', '', 'visible', now, false, false, true, true, false],
+      ['S3', 'Zéro match en live, Ustaritz', 'Aucun match au stade : on regarde les matches à la TV chez Pierrot au Pays Basque', '', 'visible', now, false, false, true, true, false],
+      ['S4', '6 Nations à l\'étranger', 'Un weekend pour aller voir le XV de France en déplacement pendant le Tournoi', '', 'visible', now, true, true, false, false, true]
+    ].forEach(function (row) { sc.appendRow(row); });
+  }
+
+  ensureSheet(ss, SHEET_RESPONSES, RESPONSE_HEADERS);
+  ensureSheet(ss, SHEET_LOG, LOG_HEADERS);
+
+  var cfg = ensureSheet(ss, SHEET_CONFIG, CONFIG_HEADERS);
+  if (cfg.getLastRow() < 2) {
+    [
+      ['names', 'Pierrot, Seb, Tib, Ju, Dav, Max, Mart', 'Liste fermée des prénoms, dans l\'ordre d\'affichage'],
+      ['mood_sport', 'Sport', 'Activités sportives, type « weekend sport »'],
+      ['mood_chill', 'Chill', 'Repos, bouffe, rien d\'organisé'],
+      ['mood_party', 'Teuf', 'Sorties, soirées'],
+      ['mood_mix', 'Mix', 'Un peu de tout, sans dominante'],
+      ['mood_other', 'Autre', 'À préciser en texte libre']
+    ].forEach(function (row) { cfg.appendRow(row); });
+  }
+
+  SpreadsheetApp.getActiveSpreadsheet().toast('Onglets prêts.', 'weekendtop14', 5);
+}
+
+function ensureSheet(ss, name, headers) {
+  var sh = ss.getSheetByName(name);
+  if (!sh) sh = ss.insertSheet(name);
+  var first = sh.getRange(1, 1, 1, headers.length).getValues()[0].join('');
+  if (!first) {
+    sh.getRange(1, 1, 1, headers.length).setValues([headers]);
+    sh.getRange(1, 1, 1, headers.length).setFontWeight('bold');
+    sh.setFrozenRows(1);
+  }
+  return sh;
+}
+
+/** Enregistre le mot de passe du groupe. Édite la valeur, lance la fonction,
+ *  puis remets la ligne à '' pour ne pas laisser traîner le mot de passe. */
+function setPassword() {
+  var pw = ''; // <— mets le mot de passe ici, lance, puis efface-le
+  if (!pw) throw new Error('Renseigne pw dans setPassword() avant de lancer.');
+  PropertiesService.getScriptProperties().setProperty('POLL_PASSWORD', pw);
+}
+
+
 // ---------------------------------------------------------------- entrées HTTP
 
 function doGet(e) {
@@ -397,64 +458,4 @@ function appendLog(name, payload) {
   var copy = {};
   Object.keys(payload).forEach(function (k) { if (k !== 'password') copy[k] = payload[k]; });
   sh.appendRow([new Date(), name, JSON.stringify(copy)]);
-}
-
-// ------------------------------------------------------- installation one-shot
-
-/**
- * À lancer une seule fois depuis l'éditeur Apps Script : crée les quatre
- * onglets, les en-têtes, les cinq scénarios de départ et la config.
- * Relançable sans risque : ne touche pas à un onglet déjà rempli.
- */
-function setupSheet() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-
-  var sc = ensureSheet(ss, SHEET_SCENARIOS, SCENARIO_HEADERS);
-  if (sc.getLastRow() < 2) {
-    var now = new Date();
-    [
-      ['S0', 'Statu quo', 'Les deux demi-finales en tribune, la fête autour, comme depuis 15 ans', '', 'visible', now, false, false, false, false, false],
-      ['S1', 'Un match + activités', 'Un seul match en tribune « format classique », le reste du weekend en activités entre potes', '', 'visible', now, false, false, false, true, false],
-      ['S2', 'Zéro match en live, maison louée', 'Aucun match au stade : on loue une maison et on regarde les matches ensemble à la TV', '', 'visible', now, false, false, true, true, false],
-      ['S3', 'Zéro match en live, Ustaritz', 'Aucun match au stade : on regarde les matches à la TV chez Pierrot au Pays Basque', '', 'visible', now, false, false, true, true, false],
-      ['S4', '6 Nations à l\'étranger', 'Un weekend pour aller voir le XV de France en déplacement pendant le Tournoi', '', 'visible', now, true, true, false, false, true]
-    ].forEach(function (row) { sc.appendRow(row); });
-  }
-
-  ensureSheet(ss, SHEET_RESPONSES, RESPONSE_HEADERS);
-  ensureSheet(ss, SHEET_LOG, LOG_HEADERS);
-
-  var cfg = ensureSheet(ss, SHEET_CONFIG, CONFIG_HEADERS);
-  if (cfg.getLastRow() < 2) {
-    [
-      ['names', 'Pierrot, Seb, Tib, Ju, Dav, Max, Mart', 'Liste fermée des prénoms, dans l\'ordre d\'affichage'],
-      ['mood_sport', 'Sport', 'Activités sportives, type « weekend sport »'],
-      ['mood_chill', 'Chill', 'Repos, bouffe, rien d\'organisé'],
-      ['mood_party', 'Teuf', 'Sorties, soirées'],
-      ['mood_mix', 'Mix', 'Un peu de tout, sans dominante'],
-      ['mood_other', 'Autre', 'À préciser en texte libre']
-    ].forEach(function (row) { cfg.appendRow(row); });
-  }
-
-  SpreadsheetApp.getActiveSpreadsheet().toast('Onglets prêts.', 'weekendtop14', 5);
-}
-
-function ensureSheet(ss, name, headers) {
-  var sh = ss.getSheetByName(name);
-  if (!sh) sh = ss.insertSheet(name);
-  var first = sh.getRange(1, 1, 1, headers.length).getValues()[0].join('');
-  if (!first) {
-    sh.getRange(1, 1, 1, headers.length).setValues([headers]);
-    sh.getRange(1, 1, 1, headers.length).setFontWeight('bold');
-    sh.setFrozenRows(1);
-  }
-  return sh;
-}
-
-/** Enregistre le mot de passe du groupe. Édite la valeur, lance la fonction,
- *  puis remets la ligne à '' pour ne pas laisser traîner le mot de passe. */
-function setPassword() {
-  var pw = ''; // <— mets le mot de passe ici, lance, puis efface-le
-  if (!pw) throw new Error('Renseigne pw dans setPassword() avant de lancer.');
-  PropertiesService.getScriptProperties().setProperty('POLL_PASSWORD', pw);
 }

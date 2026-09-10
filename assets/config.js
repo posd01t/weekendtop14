@@ -1,0 +1,7 @@
+/* Seul fichier à éditer après le déploiement de l'Apps Script.
+   Colle ici l'URL de la web app (celle qui finit par /exec).
+   Le mot de passe n'est PAS ici : il vit uniquement dans les propriétés
+   du script Apps Script. */
+window.WT14_CONFIG = {
+  WEB_APP_URL: ''
+};

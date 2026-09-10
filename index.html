@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Le weekend Top 14, on en fait quoi ?</title>
+<meta name="description" content="Sondage du groupe sur le format du weekend des demi-finales.">
+<meta name="theme-color" content="#0e3d27">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;700&display=swap">
+<link rel="stylesheet" href="assets/theme.css">
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <div class="kicker">Depuis 15 ans</div>
+    <h1>Le weekend Top&nbsp;14,<br>on en fait quoi&nbsp;?</h1>
+    <div class="rule"></div>
+  </header>
+
+  <!-- ================================================== 4.0 Accueil / mdp -->
+  <section id="gate" class="gate hidden">
+    <div class="card">
+      <header><span class="num">↯</span><h2>Entrée des joueurs</h2></header>
+      <div class="body">
+        <div class="howto">
+          <p>Tous les ans depuis 15 ans, on se fait le weekend des demi-finales. On se pose la question du format pour l'année prochaine. Ce sondage sert à ce que chacun dise ce qu'il veut, ce qu'il ne veut pas, et ce qu'il propose.</p>
+          <p>Ça prend 5 minutes, et tu peux revenir modifier ta réponse quand tu veux. Le mot de passe est dans le groupe WhatsApp.</p>
+        </div>
+        <form id="gate-form" novalidate>
+          <div class="field">
+            <div class="lab"><label for="gate-pw">Mot de passe</label></div>
+            <input type="password" id="gate-pw" autocomplete="current-password" autocapitalize="none" spellcheck="false" required>
+          </div>
+          <div id="gate-error" class="alert hidden"></div>
+          <button type="submit" class="btn block" id="gate-submit">Entrer</button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================ sondage -->
+  <main id="app" class="hidden">
+
+    <div id="loading" class="spinner">Chargement des formats…</div>
+
+    <form id="poll" class="hidden" novalidate>
+
+      <div id="new-scenarios-banner" class="banner hidden"></div>
+      <div id="prefill-notice" class="notice hidden"></div>
+
+      <!-- 1. Identification -->
+      <section class="card">
+        <header><span class="num">1</span><h2>Toi, c'est qui&nbsp;?</h2></header>
+        <div class="body">
+          <div class="howto">
+            <p>Choisis ton prénom. Si tu as déjà répondu, tes réponses précédentes se rechargent et tu peux les modifier&nbsp;: la nouvelle version remplace l'ancienne.</p>
+          </div>
+          <div class="field">
+            <div class="lab"><label for="name">Prénom</label></div>
+            <select id="name" required>
+              <option value="">— choisis —</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <!-- 2. Référentiel des scénarios -->
+      <section class="card">
+        <header><span class="num">2</span><h2>Les formats en jeu</h2></header>
+        <div class="body">
+          <div class="howto">
+            <p>Voilà les formats dont on a parlé. Lis-les une fois, ils reviennent dans les questions suivantes. Si tu as une autre idée, ajoute-la en bas&nbsp;: elle apparaîtra pour ceux qui répondent après toi, et ceux qui ont déjà répondu seront prévenus pour donner leur avis dessus.</p>
+          </div>
+
+          <div id="scenario-list"></div>
+
+          <div class="scenario" id="proposal-block" style="border-style:dashed">
+            <div class="head">
+              <div class="icon" id="proposal-icon"></div>
+              <div>
+                <div class="title">Autre&nbsp;: propose ton format</div>
+                <div class="desc">Facultatif. Laisse vide si tu n'as rien à ajouter.</div>
+              </div>
+            </div>
+            <div class="howto" style="margin:12px 0 0">
+              <p>Donne un nom court et une phrase de description, comme les autres. Coche ensuite ce que ton format implique côté maison (deux weekends, autre date, pas de stade, activités, étranger)&nbsp;: ça sert à la question 9. Tu le noteras et lui donneras des points comme les autres.</p>
+            </div>
+            <div class="field" style="margin-top:12px">
+              <div class="lab"><label for="prop-label">Nom court</label></div>
+              <input type="text" id="prop-label" maxlength="40" placeholder="Ex. Golf + bodega">
+              <div class="counter"><span id="prop-label-count">0</span>/40</div>
+            </div>
+            <div class="field">
+              <div class="lab"><label for="prop-desc">Description en une phrase</label></div>
+              <input type="text" id="prop-desc" maxlength="140" placeholder="Ex. Deux jours de golf dans les Landes, les matches à la TV le soir">
+              <div class="counter"><span id="prop-desc-count">0</span>/140</div>
+            </div>
+            <div class="field" style="margin-bottom:0">
+              <div class="lab">Ce que ton format implique</div>
+              <div class="choices" id="prop-dims"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 3. Étape 1 — acceptabilité -->
+      <section class="card">
+        <header><span class="num">3</span><h2>Chaud ou pas chaud&nbsp;?</h2></header>
+        <div class="body">
+          <div class="howto">
+            <p>Pour chaque format, dis à quel point tu es chaud, de 1 à 5. Un 1 veut dire «&nbsp;sans moi&nbsp;»&nbsp;: le format sera grisé à la question suivante et tu ne pourras pas lui donner de points. Sois honnête, c'est fait pour ça.</p>
+          </div>
+          <div id="accept-list"></div>
+        </div>
+      </section>
+
+      <!-- 4. Étape 2 — points format -->
+      <section class="card">
+        <header><span class="num">4</span><h2>10 points sur les formats</h2></header>
+        <div class="body">
+          <div class="scoreboard" id="points-board">
+            <span class="lab">Points restants</span>
+            <span class="val" id="points-left">10</span>
+          </div>
+          <div class="howto">
+            <p>Tu as 10 points à répartir entre les formats qui te tentent. Mets-les tous sur un seul si tu es sûr de toi, ou étale-les si tu hésites. Le total doit faire exactement 10.</p>
+            <p>Mettre un 1 à la question d'avant ne donne pas plus de poids à tes autres points&nbsp;: les résultats sont pondérés.</p>
+          </div>
+          <div id="points-list"></div>
+        </div>
+      </section>
+
+      <!-- 5. Étape 3 — ambiance -->
+      <section class="card">
+        <header><span class="num">5</span><h2>10 points sur l'ambiance</h2></header>
+        <div class="body">
+          <div class="scoreboard" id="mood-board">
+            <span class="lab">Points restants</span>
+            <span class="val" id="mood-left">10</span>
+          </div>
+          <div class="howto">
+            <p>Quel que soit le format qu'on choisit, à quoi tu veux que le weekend ressemble&nbsp;? 10 points à répartir entre sport, chill, teuf, mix, ou autre chose (précise). Même règle&nbsp;: total à 10.</p>
+          </div>
+          <div id="mood-list"></div>
+          <div class="field hidden" id="mood-other-wrap" style="margin-top:12px;margin-bottom:0">
+            <div class="lab"><label for="mood-other-text">Autre, précise&nbsp;:</label></div>
+            <input type="text" id="mood-other-text" maxlength="80" placeholder="Ex. culture et bonnes tables">
+          </div>
+        </div>
+      </section>
+
+      <!-- 6. Étape 4 — arbitrage -->
+      <section class="card">
+        <header><span class="num">6</span><h2>Un seul format</h2></header>
+        <div class="body">
+          <div class="howto">
+            <p>Une seule réponse possible, pas de points, pas de nuance. C'est la question qui départage si les points sont serrés.</p>
+          </div>
+          <div class="field" style="margin-bottom:0">
+            <div class="lab">Si on ne devait garder qu'un seul format l'année prochaine, ce serait lequel&nbsp;?</div>
+            <div class="choices" id="single-pick"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 7. Étape 5 — 6 Nations -->
+      <section class="card">
+        <header><span class="num">7</span><h2>Le 6 Nations</h2></header>
+        <div class="body">
+          <div class="howto">
+            <p>Le weekend 6 Nations à l'étranger, on l'a évoqué sans jamais dire si c'était en remplacement du Top 14 ou en plus. Tranche.</p>
+          </div>
+          <div class="field" style="margin-bottom:0">
+            <div class="lab">Le weekend 6 Nations à l'étranger, je le vois plutôt&nbsp;:</div>
+            <div class="choices" id="six-nations"></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 8. Étape 6 — dates -->
+      <section class="card">
+        <header><span class="num">8</span><h2>Les dates</h2></header>
+        <div class="body">
+          <div class="howto">
+            <p>Est-ce que le weekend des demi-finales est sacré, ou est-ce qu'on pourrait bouger&nbsp;? Et si tu as déjà des dates bloquées l'année prochaine (mariage, boulot, vacances), note-les.</p>
+          </div>
+          <div class="field">
+            <div class="lab">Le weekend des demi-finales (juin) est-il une contrainte&nbsp;?</div>
+            <div class="choices" id="date-constraint"></div>
+          </div>
+          <div class="field" style="margin-bottom:0">
+            <div class="lab"><label for="date-notes">Contraintes de dates connues (mariages, boulot, etc.)</label></div>
+            <input type="text" id="date-notes" maxlength="200" placeholder="Facultatif">
+          </div>
+        </div>
+      </section>
+
+      <!-- 9. Étape 7 — friction domestique -->
+      <section class="card">
+        <header><span class="num">9</span><h2>Et à la maison&nbsp;?</h2></header>
+        <div class="body">
+          <div class="howto">
+            <p>On sait tous que le vrai arbitre n'est pas dans ce sondage. Pour chacun des changements possibles, dis si ça passe à la maison sans discussion, en négociant, ou si c'est compliqué. Ça permet de voir quels formats sont réalistes pour tout le monde, pas seulement désirables.</p>
+          </div>
+          <div id="family-list"></div>
+        </div>
+      </section>
+
+      <!-- 10. Étape 8 — commentaire -->
+      <section class="card">
+        <header><span class="num">10</span><h2>Le mot de la fin</h2></header>
+        <div class="body">
+          <div class="howto">
+            <p>Tout ce que le formulaire ne capte pas&nbsp;: une activité précise, un «&nbsp;je viens seulement si…&nbsp;», une idée de lieu, une vanne. Facultatif.</p>
+          </div>
+          <div class="field" style="margin-bottom:0">
+            <div class="lab"><label for="comment">Idées, activités précises, conditions du type «&nbsp;je viens seulement si…&nbsp;»</label></div>
+            <textarea id="comment" maxlength="1200" placeholder="Facultatif"></textarea>
+          </div>
+        </div>
+      </section>
+
+      <div id="form-errors" class="alert"></div>
+
+      <button type="submit" class="btn block" id="submit-btn">Envoyer ma réponse</button>
+      <p class="small" style="color:rgba(255,255,255,.6);text-align:center;margin-top:10px">
+        Tu pourras revenir modifier ta réponse quand tu veux.
+      </p>
+    </form>
+
+    <footer class="foot">
+      <a href="results.html">Voir les résultats</a>
+    </footer>
+  </main>
+
+</div>
+
+<script src="assets/config.js"></script>
+<script src="assets/api.js"></script>
+<script src="assets/form.js"></script>
+</body>
+</html>

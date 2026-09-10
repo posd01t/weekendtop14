@@ -54,6 +54,15 @@ Compter 30 minutes pour tout redéployer à partir de zéro.
 > À chaque modification de `Code.gs`, il faut **Déployer → Gérer les déploiements
 > → modifier → Nouvelle version**. Sans ça, l'ancienne version reste servie.
 
+**Pourquoi `Code.gs` n'a aucun accent.** Tous les textes français du script sont
+écrits en échappements `\uXXXX` (`'la fête'` plutôt que `'la fête'`). Le
+fichier est donc en ASCII pur, ce qui le rend insensible aux accidents
+d'encodage entre le dépôt et l'éditeur Apps Script — un copier-coller qui
+réinterprète l'UTF-8 transforme sinon `fête` en `f√™te`, et ces libellés partent
+directement dans la Sheet puis sur la page. À l'exécution les valeurs sont
+identiques. Si tu ajoutes du texte accentué, fais-le passer par le même
+traitement, ou écris-le sans accents.
+
 ### Vérifier avec curl
 
 Remplace `<URL>` par l'URL `/exec` et `<MDP>` par le mot de passe.
@@ -144,6 +153,9 @@ Tout se fait dans la Sheet :
   séparés par des virgules.
 - **Changer les libellés d'ambiance** : lignes `mood_*` de l'onglet `config`
   (`value` = le libellé, `note` = l'explication affichée).
+- **Réparer les libellés de départ** : lance `reseedReferenceData()` depuis
+  l'éditeur Apps Script. Elle réécrit les cinq scénarios S0–S4 et les lignes de
+  config, et ne touche ni aux scénarios proposés par le groupe ni aux réponses.
 
 Les modes d'emploi affichés sous chaque question vivent dans le code, pas dans
 la Sheet : ils sont en clair dans `index.html`, à ajuster avant l'envoi.

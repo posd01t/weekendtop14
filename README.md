@@ -4,6 +4,17 @@ Sondage du groupe sur le format du weekend des demi-finales du Top 14.
 Page statique (GitHub Pages) + Google Sheet comme base + un Apps Script comme
 seule couche serveur. Pas de framework, pas de build.
 
+| | |
+|---|---|
+| Le sondage | https://posd01t.github.io/weekendtop14/ |
+| Les résultats | https://posd01t.github.io/weekendtop14/results.html |
+| La Sheet | [Top14 Réponses](https://docs.google.com/spreadsheets/d/1k5VL-3golYVO8nwxmmeC2qVL3kmXgbWszIi7ZKj1XT0/edit) |
+| Le mot de passe | dans le groupe WhatsApp, et dans les propriétés du script Apps Script |
+
+Le dépôt est public parce que GitHub Pages ne sert pas un dépôt privé sans
+compte Pro. Ce n'est pas un problème : le mot de passe n'est nulle part dans le
+code, et sans lui la page n'affiche que l'écran d'accueil.
+
 ```
 index.html            le formulaire
 results.html          la page de résultats

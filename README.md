@@ -9,7 +9,7 @@ seule couche serveur. Pas de framework, pas de build.
 | Le sondage | https://posd01t.github.io/weekendtop14/ |
 | Les résultats | https://posd01t.github.io/weekendtop14/results.html |
 | La Sheet | [Top14 Réponses](https://docs.google.com/spreadsheets/d/1k5VL-3golYVO8nwxmmeC2qVL3kmXgbWszIi7ZKj1XT0/edit) |
-| Le mot de passe | dans le groupe WhatsApp, et dans les propriétés du script Apps Script |
+| Le mot de passe | dans le groupe Signal, et dans les propriétés du script Apps Script |
 
 Le dépôt est public parce que GitHub Pages ne sert pas un dépôt privé sans
 compte Pro. Ce n'est pas un problème : le mot de passe n'est nulle part dans le
@@ -98,7 +98,7 @@ le code et que sans lui la page n'affiche rien d'autre que l'écran d'accueil.
 
 ## 3. Envoyer au groupe
 
-Le lien Pages + le mot de passe dans WhatsApp. Pas de date limite : le sondage
+Le lien Pages + le mot de passe dans Signal. Pas de date limite : le sondage
 reste ouvert et chacun peut revenir modifier sa réponse.
 
 ---
